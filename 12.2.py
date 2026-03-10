@@ -57,7 +57,7 @@ cart.add_item(apple, 20)
 
 print(cart)
 
-assert isinstance(cart.user, User) is True, 'Class copy User'
+assert isinstance(cart.user, User) is True, 'Class copy  User'
 assert cart.get_total() == 60, "total 60"
 assert cart.get_total() == 60, 'must be 60!'
 
