@@ -1,0 +1,31 @@
+{% extends 'books/base.html' %}
+
+{% block title %}Видалення{% endblock %}
+
+{% block content %}
+
+<h1>Видалити книгу?</h1>
+
+<p>
+    Ви впевнені, що хочете видалити
+    <strong>{{ object.title }}</strong>?
+</p>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <button type="submit" class="btn btn-danger">
+        Так, видалити
+    </button>
+
+    <a
+        href="{% url 'books:detail' object.pk %}"
+        class="btn btn-secondary"
+    >
+        Скасувати
+    </a>
+
+</form>
+
+{% endblock %}
