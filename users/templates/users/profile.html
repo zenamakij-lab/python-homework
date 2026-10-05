@@ -1,31 +1,32 @@
 {% extends 'books/base.html' %}
+{% load i18n %}
 
-{% block title %}Профіль{% endblock %}
+{% block title %}{% trans "Profile" %}{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center mt-5">
     <div class="col-md-7">
         <div class="card shadow-sm">
             <div class="card-body p-4">
-                <h2 class="mb-4">Профіль користувача</h2>
+                <h2 class="mb-4">{% trans "User profile" %}</h2>
 
-                <p><strong>Ім'я користувача:</strong> {{ user.username }}</p>
-                <p><strong>Email:</strong> {{ user.email }}</p>
-                <p><strong>Дата реєстрації:</strong> {{ user.date_joined|date:'d.m.Y H:i' }}</p>
+                <p><strong>{% trans "Username" %}:</strong> {{ user.username }}</p>
+                <p><strong>{% trans "Email" %}:</strong> {{ user.email }}</p>
+                <p><strong>{% trans "Registration date" %}:</strong> {{ user.date_joined|date:'d.m.Y H:i' }}</p>
 
                 <div class="mt-4">
-                    <h5>Групи</h5>
+                    <h5>{% trans "Groups" %}</h5>
                     {% if user_groups %}
                         {% for group in user_groups %}
                             <span class="badge bg-primary me-2">{{ group.name }}</span>
                         {% endfor %}
                     {% else %}
-                        <p>Користувач ще не має груп.</p>
+                        <p>{% trans "User has no groups yet." %}</p>
                     {% endif %}
                 </div>
 
                 <div class="mt-4">
-                    <h5>Права</h5>
+                    <h5>{% trans "Permissions" %}</h5>
                     {% if user.get_all_permissions %}
                         <ul class="mb-0">
                             {% for permission in user.get_all_permissions %}
@@ -33,7 +34,7 @@
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <p>Немає додаткових прав.</p>
+                        <p>{% trans "No extra permissions." %}</p>
                     {% endif %}
                 </div>
             </div>

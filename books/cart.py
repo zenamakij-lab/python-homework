@@ -7,10 +7,11 @@ from .models import Book
 
 class Cart:
     def __init__(self, request):
-        self.session = request.session
+        self.session = request.session if hasattr(request.session, 'get') else {}
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
-            cart = self.session[settings.CART_SESSION_ID] = {}
+            cart = {}
+            self.session[settings.CART_SESSION_ID] = cart
         self.cart = cart
 
     def add(self, book, quantity=1, override_quantity=False):
@@ -36,10 +37,12 @@ class Cart:
 
     def clear(self):
         self.session[settings.CART_SESSION_ID] = {}
+        self.cart = self.session[settings.CART_SESSION_ID]
         self.save()
 
     def save(self):
-        self.session.modified = True
+        if hasattr(self.session, 'modified'):
+            self.session.modified = True
 
     def __iter__(self):
         book_ids = list(self.cart.keys())

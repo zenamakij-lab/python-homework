@@ -1,12 +1,13 @@
 from decimal import Decimal
 
 import stripe
+from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.mail import send_mail
 from django.db import transaction
 from django.db.models import F
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.decorators.http import require_POST
@@ -170,9 +171,50 @@ def checkout_cancel(request):
     return HttpResponse('Payment cancelled.')
 
 
+async def async_book_list(request):
+    books_queryset = Book.objects.select_related('category').order_by('title')
+    books = await sync_to_async(list)(books_queryset)
+    results = [{
+        'id': book.id,
+        'title': book.title,
+        'author': book.author,
+        'price': str(book.price),
+        'category': book.category.name,
+    } for book in books]
+    return JsonResponse({'count': len(results), 'results': results})
+
+
+async def async_book_detail(request, pk):
+    try:
+        book = await sync_to_async(Book.objects.select_related('category').get)(pk=pk)
+    except Book.DoesNotExist:
+        return JsonResponse({'error': 'Book not found.'}, status=404)
+    return JsonResponse({
+        'id': book.id,
+        'title': book.title,
+        'author': book.author,
+        'price': str(book.price),
+        'stock': book.stock,
+        'category': book.category.name,
+    })
+
+
+async def async_cart_summary(request):
+    cart = await sync_to_async(lambda: request.session.get('cart', {}))()
+    total = Decimal('0.00')
+    for book_id, item in cart.items():
+        try:
+            book = await sync_to_async(Book.objects.get)(pk=book_id)
+        except Book.DoesNotExist:
+            continue
+        total += Decimal(str(book.price)) * int(item.get('quantity', 0))
+    return JsonResponse({'items': len(cart), 'total': str(total)})
+
+
 class BookListView(ListView):
     model = Book
     template_name = 'books/book_list.html'
+    context_object_name = 'books'
     paginate_by = 6
 
     def get_queryset(self):

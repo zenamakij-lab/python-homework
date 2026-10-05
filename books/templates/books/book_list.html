@@ -1,10 +1,11 @@
 {% extends 'books/base.html' %}
+{% load i18n %}
 
-{% block title %}Книги{% endblock %}
+{% block title %}{% trans "Books" %}{% endblock %}
 
 {% block content %}
 
-<h1 class="mb-4">Книги</h1>
+<h1 class="mb-4">{% trans "Books" %}</h1>
 
 <form method="get" class="row mb-4">
     <div class="col-md-8">
@@ -12,14 +13,14 @@
             type="text"
             name="search"
             class="form-control"
-            placeholder="Пошук книги..."
+            placeholder="{% trans 'Search books...' %}"
             value="{{ request.GET.search }}"
         >
     </div>
 
     <div class="col-md-4">
         <button class="btn btn-primary w-100">
-            Пошук
+            {% trans "Search" %}
         </button>
     </div>
 </form>
@@ -39,22 +40,22 @@
                 </h5>
 
                 <p class="card-text">
-                    <strong>Автор:</strong> {{ book.author }}
+                    <strong>{% trans "Author" %}:</strong> {{ book.author }}
                 </p>
 
                 <p class="card-text">
-                    <strong>Ціна:</strong> {{ book.price }} грн
+                    <strong>{% trans "Price" %}:</strong> {{ book.price }} {% trans "UAH" %}
                 </p>
 
                 <p class="card-text">
-                    <strong>На складі:</strong> {{ book.stock }}
+                    <strong>{% trans "In stock" %}:</strong> {{ book.stock }}
                 </p>
 
                 <a
                     href="{% url 'books:detail' book.pk %}"
                     class="btn btn-primary"
                 >
-                    Детальніше
+                    {% trans "More details" %}
                 </a>
 
             </div>
@@ -65,7 +66,7 @@
 
     {% empty %}
 
-    <p>Книг не знайдено.</p>
+    <p>{% trans "No books found." %}</p>
 
     {% endfor %}
 
@@ -83,7 +84,7 @@
                 class="page-link"
                 href="?page={{ page_obj.previous_page_number }}"
             >
-                Назад
+                {% trans "Back" %}
             </a>
         </li>
         {% endif %}
@@ -100,7 +101,7 @@
                 class="page-link"
                 href="?page={{ page_obj.next_page_number }}"
             >
-                Далі
+                {% trans "Next" %}
             </a>
         </li>
         {% endif %}

@@ -8,7 +8,7 @@ urlpatterns = [
     path('', include('books.urls')),
 ]
 
-if settings.DEBUG:
+if settings.DEBUG and not settings.IS_TESTING:
     import debug_toolbar
 
     urlpatterns += [

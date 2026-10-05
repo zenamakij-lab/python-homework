@@ -1,12 +1,13 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
 
 class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(required=True, label=_('Email'))
 
     class Meta:
         model = User
@@ -25,9 +26,9 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class EmailAuthenticationForm(AuthenticationForm):
-    username = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'autofocus': True}))
+    username = forms.EmailField(label=_('Email'), widget=forms.EmailInput(attrs={'autofocus': True}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'you@example.com'})
+        self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': _('you@example.com')})
         self.fields['password'].widget.attrs.update({'class': 'form-control', 'placeholder': '••••••••'})
