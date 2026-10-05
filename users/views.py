@@ -12,6 +12,7 @@ User = get_user_model()
 
 
 class RegisterView(CreateView):
+    """Create a new user account and assign the default customer group."""
     model = User
     form_class = CustomUserCreationForm
     template_name = 'users/register.html'
@@ -26,6 +27,7 @@ class RegisterView(CreateView):
 
 
 class CustomLoginView(LoginView):
+    """Authenticate the user by email and redirect successful logins to the catalog."""
     form_class = EmailAuthenticationForm
     template_name = 'users/login.html'
     redirect_authenticated_user = True
@@ -35,10 +37,12 @@ class CustomLoginView(LoginView):
 
 
 class CustomLogoutView(LogoutView):
+    """Log the user out and redirect to the storefront home page."""
     next_page = reverse_lazy('books:list')
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):
+    """Show the authenticated user profile and their group membership."""
     template_name = 'users/profile.html'
 
     def get_context_data(self, **kwargs):

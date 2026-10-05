@@ -18,6 +18,7 @@ from .models import Book, Order, OrderItem
 
 
 def send_order_confirmation(order):
+    """Send an email confirmation message after a successful checkout."""
     subject = f'Order #{order.pk} confirmation'
     message = (
         f'Thank you for your order #{order.pk}.\n'
@@ -29,6 +30,7 @@ def send_order_confirmation(order):
 
 
 def create_order_from_cart(request, cart):
+    """Build an Order and corresponding OrderItem records from the current cart."""
     if not cart.cart:
         raise ValueError('Cart is empty.')
 
@@ -70,6 +72,7 @@ def create_order_from_cart(request, cart):
 
 @require_POST
 def add_to_cart(request, book_id):
+    """Add one or more books to the session cart and redirect back to the catalog."""
     book = get_object_or_404(Book, pk=book_id)
     quantity = max(1, int(request.POST.get('quantity', 1)))
     cart = Cart(request)
@@ -79,6 +82,7 @@ def add_to_cart(request, book_id):
 
 @require_POST
 def remove_from_cart(request, book_id):
+    """Remove a single book from the cart by its ID."""
     book = get_object_or_404(Book, pk=book_id)
     cart = Cart(request)
     cart.remove(book)
@@ -87,12 +91,14 @@ def remove_from_cart(request, book_id):
 
 @require_POST
 def clear_cart(request):
+    """Clear the session cart and return to the cart summary page."""
     cart = Cart(request)
     cart.clear()
     return redirect('books:cart')
 
 
 def cart_view(request):
+    """Render the current cart contents and computed total price."""
     cart = Cart(request)
     items = list(cart)
     total_price = cart.get_total_price()
@@ -109,6 +115,7 @@ def cart_view(request):
 
 @require_POST
 def checkout_view(request):
+    """Create a Stripe checkout session for the current cart and persist the order."""
     cart = Cart(request)
     if not cart.cart:
         return HttpResponseBadRequest('Cart is empty.')
@@ -148,6 +155,7 @@ def checkout_view(request):
 
 
 def checkout_success(request):
+    """Handle the redirected Stripe success response and mark the order as paid."""
     session_id = request.GET.get('session_id')
     if not session_id:
         return HttpResponse('Missing session_id.')
@@ -168,10 +176,12 @@ def checkout_success(request):
 
 
 def checkout_cancel(request):
+    """Render the Stripe cancellation page for an aborted payment flow."""
     return HttpResponse('Payment cancelled.')
 
 
 async def async_book_list(request):
+    """Return a JSON catalog listing using async database access."""
     books_queryset = Book.objects.select_related('category').order_by('title')
     books = await sync_to_async(list)(books_queryset)
     results = [{
@@ -185,6 +195,7 @@ async def async_book_list(request):
 
 
 async def async_book_detail(request, pk):
+    """Return a JSON detail payload for one book via async ORM access."""
     try:
         book = await sync_to_async(Book.objects.select_related('category').get)(pk=pk)
     except Book.DoesNotExist:
@@ -200,6 +211,7 @@ async def async_book_detail(request, pk):
 
 
 async def async_cart_summary(request):
+    """Return a lightweight JSON summary of the current cart total and item count."""
     cart = await sync_to_async(lambda: request.session.get('cart', {}))()
     total = Decimal('0.00')
     for book_id, item in cart.items():
@@ -212,6 +224,7 @@ async def async_cart_summary(request):
 
 
 class BookListView(ListView):
+    """Display the bookstore catalog with optional search and pagination."""
     model = Book
     template_name = 'books/book_list.html'
     context_object_name = 'books'
@@ -228,11 +241,13 @@ class BookListView(ListView):
 
 
 class BookDetailView(DetailView):
+    """Show the detailed information page for a single book."""
     model = Book
     template_name = 'books/book_detail.html'
 
 
 class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    """Allow a staff user with permissions to create a new book record."""
     model = Book
     fields = ['title', 'author', 'price', 'description', 'stock', 'category']
     template_name = 'books/book_form.html'
@@ -242,6 +257,7 @@ class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
 
 class BookUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """Allow a staff user to edit an existing book detail record."""
     model = Book
     fields = ['title', 'author', 'price', 'description', 'stock', 'category']
     template_name = 'books/book_form.html'
@@ -251,6 +267,7 @@ class BookUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
 
 class BookDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    """Delete a book after confirming the action with a dedicated template."""
     model = Book
     template_name = 'books/book_confirm_delete.html'
     permission_required = 'books.delete_book'
