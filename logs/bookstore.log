@@ -259,3 +259,6 @@ INFO 2026-09-29 20:35:41,784 middleware Request POST /users/register/ by Anonymo
 INFO 2026-09-29 20:35:41,800 middleware Request GET /users/login/ by Anonymous in 2.27 ms | groups=Anonymous | status=200
 INFO 2026-09-29 20:35:59,271 middleware Request POST /users/login/ by Anonymous in 511.66 ms | groups=Anonymous | status=200
 INFO 2026-09-29 20:36:07,763 middleware Request POST /users/login/ by Anonymous in 489.28 ms | groups=Anonymous | status=200
+INFO 2026-10-05 14:27:11,614 middleware Request GET / by Anonymous in 195.44 ms | groups=Anonymous | status=200
+INFO 2026-10-05 14:27:11,847 middleware Request GET /favicon.ico by Anonymous in 3.5 ms | groups=Anonymous | status=404
+WARNING 2026-10-05 14:27:11,861 log Not Found: /favicon.ico

@@ -25,6 +25,11 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-f+3h3#sl#qy3krt69=3v7foz!s
 DEBUG = os.getenv('DEBUG', 'False').lower() in {'1', 'true', 'yes', 'on'}
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+CART_SESSION_ID = 'cart'
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@example.com')
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -69,7 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bookstore.wsgi.application'
 
-USE_SQLITE = os.getenv('USE_SQLITE', 'False').lower() in {'1', 'true', 'yes', 'on'}
+USE_SQLITE = os.getenv('USE_SQLITE', 'True').lower() in {'1', 'true', 'yes', 'on'}
 
 if USE_SQLITE:
     DATABASES = {
