@@ -251,3 +251,11 @@ INFO 2026-09-29 20:33:49,315 middleware Request GET / by Anonymous in 35.04 ms |
 INFO 2026-09-29 20:33:49,572 middleware Request GET /favicon.ico by Anonymous in 4.07 ms | groups=Anonymous | status=404
 WARNING 2026-09-29 20:33:49,588 log Not Found: /favicon.ico
 INFO 2026-09-29 20:34:12,402 middleware Request GET / by Anonymous in 110.34 ms | groups=Anonymous | status=200
+INFO 2026-09-29 20:34:20,834 middleware Request GET /users/register/ by Anonymous in 18.76 ms | groups=Anonymous | status=200
+INFO 2026-09-29 20:34:58,043 middleware Request POST /users/register/ by Anonymous in 51.65 ms | groups=Anonymous | status=200
+INFO 2026-09-29 20:35:10,130 middleware Request POST /users/register/ by Anonymous in 5.59 ms | groups=Anonymous | status=200
+INFO 2026-09-29 20:35:30,197 middleware Request POST /users/register/ by Anonymous in 5.11 ms | groups=Anonymous | status=200
+INFO 2026-09-29 20:35:41,784 middleware Request POST /users/register/ by Anonymous in 502.6 ms | groups=Anonymous | status=302
+INFO 2026-09-29 20:35:41,800 middleware Request GET /users/login/ by Anonymous in 2.27 ms | groups=Anonymous | status=200
+INFO 2026-09-29 20:35:59,271 middleware Request POST /users/login/ by Anonymous in 511.66 ms | groups=Anonymous | status=200
+INFO 2026-09-29 20:36:07,763 middleware Request POST /users/login/ by Anonymous in 489.28 ms | groups=Anonymous | status=200

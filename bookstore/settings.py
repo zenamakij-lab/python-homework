@@ -10,17 +10,21 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 LOG_DIR = BASE_DIR / 'logs'
 LOG_DIR.mkdir(exist_ok=True)
+load_dotenv(BASE_DIR / '.env')
 
-SECRET_KEY = 'django-insecure-f+3h3#sl#qy3krt69=3v7foz!s(bnd84xmuoz^4dia0#7o&)zd'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-f+3h3#sl#qy3krt69=3v7foz!s(bnd84xmuoz^4dia0#7o&)zd')
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() in {'1', 'true', 'yes', 'on'}
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -65,12 +69,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bookstore.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+USE_SQLITE = os.getenv('USE_SQLITE', 'False').lower() in {'1', 'true', 'yes', 'on'}
+
+if USE_SQLITE:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DB', 'bookstore'),
+            'USER': os.getenv('POSTGRES_USER', 'postgres'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
+            'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
+            'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -92,7 +110,8 @@ TIME_ZONE = 'Europe/Kyiv'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
@@ -105,6 +124,7 @@ INTERNAL_IPS = ['127.0.0.1']
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+    'IS_RUNNING_TESTS': False,
 }
 
 LOGGING = {
