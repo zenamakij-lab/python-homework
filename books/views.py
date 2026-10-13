@@ -4,17 +4,21 @@ import stripe
 from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.cache import cache
 from django.core.mail import send_mail
 from django.db import transaction
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_POST
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
 from .cart import Cart
 from .models import Book, Order, OrderItem
+from .tasks import send_order_email
 
 
 def send_order_confirmation(order):
@@ -26,6 +30,9 @@ def send_order_confirmation(order):
         f'Total: {order.total_price}\n'
         f'Status: {order.get_status_display()}'
     )
+    if settings.CELERY_BROKER_URL:
+        send_order_email.delay(order.pk)
+        return
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [order.email], fail_silently=False)
 
 
@@ -223,6 +230,7 @@ async def async_cart_summary(request):
     return JsonResponse({'items': len(cart), 'total': str(total)})
 
 
+@method_decorator(cache_page(300), name='dispatch')
 class BookListView(ListView):
     """Display the bookstore catalog with optional search and pagination."""
     model = Book
@@ -240,10 +248,21 @@ class BookListView(ListView):
         return queryset.distinct().order_by('title')
 
 
+@method_decorator(cache_page(300), name='dispatch')
 class BookDetailView(DetailView):
     """Show the detailed information page for a single book."""
     model = Book
     template_name = 'books/book_detail.html'
+
+    def get_object(self, queryset=None):
+        cache_key = f'book_detail:{self.kwargs["pk"]}'
+        cached_object = cache.get(cache_key)
+        if cached_object is not None:
+            return cached_object
+
+        obj = super().get_object(queryset)
+        cache.set(cache_key, obj, timeout=300)
+        return obj
 
 
 class BookCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):

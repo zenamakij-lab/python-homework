@@ -1,5 +1,5 @@
 {% extends 'books/base.html' %}
-{% load i18n %}
+{% load i18n cache %}
 
 {% block title %}{% trans "Books" %}{% endblock %}
 
@@ -7,6 +7,7 @@
 
 <h1 class="mb-4">{% trans "Books" %}</h1>
 
+{% cache 300 book-list-page %}
 <form method="get" class="row mb-4">
     <div class="col-md-8">
         <input
@@ -72,6 +73,7 @@
 
 </div>
 
+{% endcache %}
 
 {% if is_paginated %}
 

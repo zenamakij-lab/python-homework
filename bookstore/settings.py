@@ -14,7 +14,9 @@ import os
 import sys
 from pathlib import Path
 
+import sentry_sdk
 from dotenv import load_dotenv
+from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 LOG_DIR = BASE_DIR / 'logs'
@@ -24,6 +26,7 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-f+3h3#sl#qy3krt69=3v7foz!s(bnd84xmuoz^4dia0#7o&)zd')
 
 DEBUG = os.getenv('DEBUG', 'False').lower() in {'1', 'true', 'yes', 'on'}
+REDIS_URL = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/0')
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 CART_SESSION_ID = 'cart'
@@ -31,8 +34,35 @@ STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@example.com')
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', REDIS_URL)
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', REDIS_URL)
 
 IS_TESTING = any('pytest' in str(arg).lower() for arg in sys.argv) or bool(os.environ.get('PYTEST_CURRENT_TEST'))
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'IGNORE_EXCEPTIONS': True,
+        },
+        'KEY_PREFIX': 'bookstore',
+    }
+}
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+
+SENTRY_DSN = os.getenv('SENTRY_DSN', '')
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        send_default_pii=True,
+        traces_sample_rate=float(os.getenv('SENTRY_TRACES_SAMPLE_RATE', '0.2')),
+        environment=os.getenv('SENTRY_ENVIRONMENT', 'development'),
+    )
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -42,6 +72,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'django_celery_results',
     'rest_framework',
     'django_filters',
     'rest_framework_simplejwt',
@@ -129,6 +160,23 @@ LOCALE_PATHS = [BASE_DIR / 'locale']
 TIME_ZONE = 'Europe/Kyiv'
 USE_I18N = True
 USE_TZ = True
+
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = CELERY_RESULT_BACKEND
+CELERY_BROKER_URL = CELERY_BROKER_URL
+CELERY_BEAT_SCHEDULE = {
+    'cleanup-expired-sessions-daily': {
+        'task': 'books.tasks.cleanup_expired_sessions',
+        'schedule': 60 * 60 * 6,
+    },
+    'generate-books-report-daily': {
+        'task': 'books.tasks.generate_books_report_periodic',
+        'schedule': 60 * 60 * 24,
+    },
+}
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
