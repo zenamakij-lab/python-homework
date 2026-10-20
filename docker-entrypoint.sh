@@ -3,7 +3,8 @@ set -e
 
 export PYTHONUNBUFFERED=1
 
-until python - <<'PY'
+if [ "${USE_SQLITE:-True}" != "True" ] && [ "${USE_SQLITE:-True}" != "true" ]; then
+    until python - <<'PY'
 import os
 import sys
 
@@ -22,11 +23,11 @@ try:
 except Exception:
     sys.exit(1)
 PY
-
-do
-    echo "PostgreSQL is not ready yet. Retrying..."
-    sleep 2
-done
+    do
+        echo "PostgreSQL is not ready yet. Retrying..."
+        sleep 2
+    done
+fi
 
 echo "Applying database migrations..."
 python manage.py migrate --noinput
@@ -35,4 +36,4 @@ echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
 echo "Starting Gunicorn server..."
-exec gunicorn bookstore.wsgi:application --bind 0.0.0.0:8000 --workers 3
+exec gunicorn --config gunicorn.conf.py bookstore.wsgi:application

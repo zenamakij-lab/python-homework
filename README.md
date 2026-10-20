@@ -1,5 +1,8 @@
 # Bookstore Project
 
+[![Build status](https://github.com/OWNER/REPO/actions/workflows/django.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/django.yml)
+[![Coverage](https://img.shields.io/badge/coverage-80.60%25-brightgreen)](https://github.com/OWNER/REPO/actions/workflows/django.yml)
+
 A Django bookstore application with product catalog, cart, order creation, Stripe checkout flow, email confirmations, user authentication, and async API endpoints.
 
 ## Features

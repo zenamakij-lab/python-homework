@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: bookstore-web
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: gunicorn --config gunicorn.conf.py bookstore.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: bookstore.settings.production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: USE_SQLITE
+        value: "False"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bookstore-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: bookstore-redis
+          property: connectionString
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: redis
+          name: bookstore-redis
+          property: connectionString
+      - key: CELERY_RESULT_BACKEND
+        fromService:
+          type: redis
+          name: bookstore-redis
+          property: connectionString
+
+  - type: redis
+    name: bookstore-redis
+    plan: free
+
+  - type: psql
+    name: bookstore-db
+    plan: free
