@@ -65,9 +65,7 @@ def load_products(filename):
     return products
 
 
-
 products = load_products("products.txt")
-
 
 
 print("Товари магазину:")

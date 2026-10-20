@@ -43,8 +43,8 @@ class Purchase:
         return total
 
 
-lemon = Item('lemon', 5, "yellow", "small")
-apple = Item('apple', 2, "red", "middle")
+lemon = Item("lemon", 5, "yellow", "small")
+apple = Item("apple", 2, "red", "middle")
 
 print(lemon)  # lemon, price: 5
 
@@ -57,9 +57,9 @@ cart.add_item(apple, 20)
 
 print(cart)
 
-assert isinstance(cart.user, User) is True, 'Class copy  User'
+assert isinstance(cart.user, User) is True, "Class copy  User"
 assert cart.get_total() == 60, "total 60"
-assert cart.get_total() == 60, 'must be 60!'
+assert cart.get_total() == 60, "must be 60!"
 
 cart.add_item(apple, 10)
 

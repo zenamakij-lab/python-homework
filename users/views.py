@@ -13,39 +13,45 @@ User = get_user_model()
 
 class RegisterView(CreateView):
     """Create a new user account and assign the default customer group."""
+
     model = User
     form_class = CustomUserCreationForm
-    template_name = 'users/register.html'
-    success_url = reverse_lazy('users:login')
+    template_name = "users/register.html"
+    success_url = reverse_lazy("users:login")
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        customer_group, _ = Group.objects.get_or_create(name='Customers')
+        customer_group, _ = Group.objects.get_or_create(name="Customers")
         self.object.groups.add(customer_group)
-        messages.success(self.request, 'Реєстрацію успішно завершено. Увійдіть до системи.')
+        messages.success(
+            self.request, "Реєстрацію успішно завершено. Увійдіть до системи."
+        )
         return response
 
 
 class CustomLoginView(LoginView):
     """Authenticate the user by email and redirect successful logins to the catalog."""
+
     form_class = EmailAuthenticationForm
-    template_name = 'users/login.html'
+    template_name = "users/login.html"
     redirect_authenticated_user = True
 
     def get_success_url(self):
-        return reverse_lazy('books:list')
+        return reverse_lazy("books:list")
 
 
 class CustomLogoutView(LogoutView):
     """Log the user out and redirect to the storefront home page."""
-    next_page = reverse_lazy('books:list')
+
+    next_page = reverse_lazy("books:list")
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):
     """Show the authenticated user profile and their group membership."""
-    template_name = 'users/profile.html'
+
+    template_name = "users/profile.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user_groups'] = self.request.user.groups.all()
+        context["user_groups"] = self.request.user.groups.all()
         return context

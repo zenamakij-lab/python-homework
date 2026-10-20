@@ -7,7 +7,7 @@ class Human:
         self.last_name = last_name
 
     def __str__(self):
-        return f'{self.gender}, {self.age}, {self.first_name} {self.last_name}'
+        return f"{self.gender}, {self.age}, {self.first_name} {self.last_name}"
 
 
 class Student(Human):
@@ -17,7 +17,7 @@ class Student(Human):
         self.record_book = record_book
 
     def __str__(self):
-        return f'{self.gender}, {self.age}, {self.first_name} {self.last_name}, {self.record_book}'
+        return f"{self.gender}, {self.age}, {self.first_name} {self.last_name}, {self.record_book}"
 
 
 class Group:
@@ -41,26 +41,28 @@ class Group:
         return None
 
     def __str__(self):
-        all_students = ''
+        all_students = ""
         for student in self.group:
-            all_students += str(student) + '\n'
-        return f'Number:{self.number}\n{all_students}'
+            all_students += str(student) + "\n"
+        return f"Number:{self.number}\n{all_students}"
 
 
-st1 = Student('Male', 30, 'Steve', 'Jobs', 'AN142')
-st2 = Student('Female', 25, 'Liza', 'Taylor', 'AN145')
+st1 = Student("Male", 30, "Steve", "Jobs", "AN142")
+st2 = Student("Female", 25, "Liza", "Taylor", "AN145")
 
-gr = Group('PD1')
+gr = Group("PD1")
 gr.add_student(st1)
 gr.add_student(st2)
 
 print(gr)
 
-assert str(gr.find_student('Jobs')) == str(st1), 'Test1'
-assert gr.find_student('Jobs2') is None, 'Test2'
-assert isinstance(gr.find_student('Jobs'), Student) is True, 'Метод пошуку повинен повертати екземпляр'
+assert str(gr.find_student("Jobs")) == str(st1), "Test1"
+assert gr.find_student("Jobs2") is None, "Test2"
+assert (
+    isinstance(gr.find_student("Jobs"), Student) is True
+), "Метод пошуку повинен повертати екземпляр"
 
-gr.delete_student('Taylor')
+gr.delete_student("Taylor")
 print(gr)  # Only one student
 
-gr.delete_student('Taylor')  # No error
+gr.delete_student("Taylor")  # No error

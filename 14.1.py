@@ -11,7 +11,7 @@ class Human:
         self.last_name = last_name
 
     def __str__(self):
-        return f'{self.gender} {self.age} {self.first_name} {self.last_name}'
+        return f"{self.gender} {self.age} {self.first_name} {self.last_name}"
 
 
 class Student(Human):
@@ -21,7 +21,7 @@ class Student(Human):
         self.record_book = record_book
 
     def __str__(self):
-        return f'{self.gender} {self.age} {self.first_name} {self.last_name} {self.record_book}'
+        return f"{self.gender} {self.age} {self.first_name} {self.last_name} {self.record_book}"
 
 
 class Group:
@@ -47,17 +47,17 @@ class Group:
         return None
 
     def __str__(self):
-        all_students = ''
+        all_students = ""
         for student in self.group:
-            all_students += str(student) + '\n'
-        return f'Number:{self.number}\n{all_students}'
+            all_students += str(student) + "\n"
+        return f"Number:{self.number}\n{all_students}"
 
 
-gr = Group('PD1')
+gr = Group("PD1")
 
 try:
     for i in range(11):
-        st = Student('Male', 20, f'Name{i}', f'Last{i}', f'AN{i}')
+        st = Student("Male", 20, f"Name{i}", f"Last{i}", f"AN{i}")
         gr.add_student(st)
 except TooManyStudentsError as e:
     print(e)

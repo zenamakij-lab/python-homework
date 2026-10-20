@@ -33,13 +33,13 @@ f_a = Fraction(2, 3)
 f_b = Fraction(3, 6)
 
 f_c = f_b + f_a
-assert str(f_c) == 'Fraction: 21, 18'
+assert str(f_c) == "Fraction: 21, 18"
 
 f_d = f_b * f_a
-assert str(f_d) == 'Fraction: 6, 18'
+assert str(f_d) == "Fraction: 6, 18"
 
 f_e = f_a - f_b
-assert str(f_e) == 'Fraction: 3, 18'
+assert str(f_e) == "Fraction: 3, 18"
 
 assert f_d < f_c
 assert f_d > f_e
@@ -50,4 +50,4 @@ f_2 = Fraction(3, 6)
 
 assert f_1 == f_2
 
-print('OK')
+print("OK")

@@ -43,11 +43,14 @@ services:
       REDIS_URL: redis://redis:6379/0
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/0
+      PROJECT_B_API_URL: http://project_b:8001
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
+      project_b:
+        condition: service_started
     ports:
       - "8000:8000"
     volumes:
@@ -60,6 +63,29 @@ services:
       timeout: 10s
       retries: 5
       start_period: 25s
+
+  project_b:
+    build:
+      context: ./project_b
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      DJANGO_SETTINGS_MODULE: project_b.settings
+      POSTGRES_HOST: db
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./project_b:/app
+    command: ["./docker-entrypoint.sh"]
 
   celery:
     build:

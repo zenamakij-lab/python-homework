@@ -13367,3 +13367,67 @@ INFO 2026-10-13 20:19:38,292 middleware Request GET /api/orders/1/ by user-d0b6c
 WARNING 2026-10-13 20:19:38,292 log Forbidden: /api/orders/1/
 INFO 2026-10-13 20:19:47,922 middleware Request POST /api/orders/ by user-2a5840ec-14@example.com in 4608.65 ms | groups= | status=201
 INFO 2026-10-13 20:19:57,520 middleware Request GET /api/orders/1/ by user-a05f7924-15@example.com in 4577.01 ms | groups= | status=200
+INFO 2026-10-20 11:45:56,583 middleware Request GET /health/ by Anonymous in 9.27 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:46:32,951 middleware Request GET /api/books/ by Anonymous in 9152.32 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:46:46,671 middleware Request GET /api/books/1/ by Anonymous in 9137.25 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:47:04,943 middleware Request GET /api/books/ by Anonymous in 9145.05 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:47:23,219 middleware Request GET /api/books/ by Anonymous in 9137.45 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:49:26,571 middleware Request GET /api/books/ by Anonymous in 9169.33 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:49:27,075 middleware Request POST /api/books/ by user-d804c360-0@example.com in 0.81 ms | groups= | status=403
+WARNING 2026-10-20 11:49:27,077 log Forbidden: /api/books/
+INFO 2026-10-20 11:49:36,663 middleware Request POST /api/books/ by user-b60987ba-1@example.com in 9104.18 ms | groups= | status=201
+INFO 2026-10-20 11:49:50,882 middleware Request PATCH /api/books/1/ by user-78be2a5b-2@example.com in 9136.36 ms | groups= | status=200
+INFO 2026-10-20 11:50:05,101 middleware Request DELETE /api/books/1/ by user-888d4334-3@example.com in 9146.3 ms | groups= | status=204
+INFO 2026-10-20 11:50:14,230 middleware Request GET /api/categories/ by Anonymous in 9123.97 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:50:27,931 middleware Request GET /api/categories/1/ by Anonymous in 9142.05 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:50:32,969 middleware Request POST /api/categories/ by user-83ed79e3-4@example.com in 4556.15 ms | groups= | status=201
+INFO 2026-10-20 11:50:37,983 middleware Request PATCH /api/categories/1/ by user-1f805dfb-5@example.com in 4530.21 ms | groups= | status=200
+INFO 2026-10-20 11:50:43,538 middleware Request GET /api/orders/ by user-d3bd1998-6@example.com in 4577.53 ms | groups= | status=200
+INFO 2026-10-20 11:50:49,632 middleware Request GET /api/orders/ by user-c4018b90-8@example.com in 4580.93 ms | groups= | status=200
+INFO 2026-10-20 11:50:54,696 middleware Request GET /api/orders/1/ by user-30851384-11@example.com in 4555.54 ms | groups= | status=200
+INFO 2026-10-20 11:51:00,246 middleware Request GET /api/orders/1/ by user-189780b2-12@example.com in 4583.93 ms | groups= | status=403
+WARNING 2026-10-20 11:51:00,246 log Forbidden: /api/orders/1/
+INFO 2026-10-20 11:51:09,896 middleware Request POST /api/orders/ by user-807d1192-14@example.com in 4611.73 ms | groups= | status=201
+INFO 2026-10-20 11:51:19,510 middleware Request GET /api/orders/1/ by user-8f223357-15@example.com in 4575.98 ms | groups= | status=200
+INFO 2026-10-20 11:53:05,160 middleware Request GET /health/ by Anonymous in 7.39 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:53:21,166 middleware Request GET / by Anonymous in 11431.24 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:53:41,624 middleware Request GET / by Anonymous in 11385.49 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:54:02,181 middleware Request GET /1/ by Anonymous in 15991.86 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:55:24,592 middleware Request GET /health/ by Anonymous in 6.88 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:55:40,609 middleware Request GET / by Anonymous in 11428.21 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:56:01,166 middleware Request GET / by Anonymous in 11412.45 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:56:21,740 middleware Request GET /1/ by Anonymous in 15990.63 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:57:51,217 middleware Request GET /health/ by Anonymous in 6.89 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:58:07,224 middleware Request GET / by Anonymous in 11443.33 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:58:27,767 middleware Request GET / by Anonymous in 11442.01 ms | groups=Anonymous | status=200
+INFO 2026-10-20 11:58:48,341 middleware Request GET /1/ by Anonymous in 15990.78 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:51:00,669 middleware Request GET /health/ by Anonymous in 8.95 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:51:51,441 middleware Request GET / by Anonymous in 11442.22 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:52:11,901 middleware Request GET / by Anonymous in 11364.06 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:52:32,328 middleware Request GET /1/ by Anonymous in 15873.99 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:54:32,923 middleware Request GET /api/books/ by Anonymous in 9073.43 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:54:46,581 middleware Request GET /api/books/1/ by Anonymous in 9102.74 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:55:04,735 middleware Request GET /api/books/ by Anonymous in 9080.04 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:55:22,924 middleware Request GET /api/books/ by Anonymous in 9091.72 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:57:25,826 middleware Request GET /api/books/ by Anonymous in 9119.57 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:57:26,338 middleware Request POST /api/books/ by user-fcaf6eba-0@example.com in 0.85 ms | groups= | status=403
+WARNING 2026-10-20 22:57:26,340 log Forbidden: /api/books/
+INFO 2026-10-20 22:57:35,913 middleware Request POST /api/books/ by user-539af318-1@example.com in 9081.31 ms | groups= | status=201
+INFO 2026-10-20 22:57:50,065 middleware Request PATCH /api/books/1/ by user-b493c0d6-2@example.com in 9093.47 ms | groups= | status=200
+INFO 2026-10-20 22:58:04,181 middleware Request DELETE /api/books/1/ by user-751d07cf-3@example.com in 9070.25 ms | groups= | status=204
+INFO 2026-10-20 22:58:13,256 middleware Request GET /api/categories/ by Anonymous in 9069.54 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:58:26,889 middleware Request GET /api/categories/1/ by Anonymous in 9080.49 ms | groups=Anonymous | status=200
+INFO 2026-10-20 22:58:31,940 middleware Request POST /api/categories/ by user-514224e0-4@example.com in 4565.44 ms | groups= | status=201
+INFO 2026-10-20 22:58:36,955 middleware Request PATCH /api/categories/1/ by user-548a3d77-5@example.com in 4539.25 ms | groups= | status=200
+INFO 2026-10-20 22:58:42,507 middleware Request GET /api/orders/ by user-c2737d6c-6@example.com in 4563.86 ms | groups= | status=200
+INFO 2026-10-20 22:58:48,498 middleware Request GET /api/orders/ by user-6b388e8b-8@example.com in 4564.44 ms | groups= | status=200
+INFO 2026-10-20 22:58:53,518 middleware Request GET /api/orders/1/ by user-5ff3f40c-11@example.com in 4527.49 ms | groups= | status=200
+INFO 2026-10-20 22:58:59,003 middleware Request GET /api/orders/1/ by user-5a3fc086-12@example.com in 4530.66 ms | groups= | status=403
+WARNING 2026-10-20 22:58:59,003 log Forbidden: /api/orders/1/
+INFO 2026-10-20 22:59:10,649 middleware Request POST /api/orders/ by user-73b5e448-14@example.com in 6617.38 ms | groups= | status=400
+WARNING 2026-10-20 22:59:10,649 log Bad Request: /api/orders/
+INFO 2026-10-20 22:59:20,449 middleware Request GET /api/orders/1/ by user-23d9a9a6-15@example.com in 4557.43 ms | groups= | status=200
+INFO 2026-10-20 23:04:22,692 middleware Request GET /health/ by Anonymous in 7.03 ms | groups=Anonymous | status=200
+INFO 2026-10-20 23:05:13,448 middleware Request GET / by Anonymous in 11430.19 ms | groups=Anonymous | status=200
+INFO 2026-10-20 23:05:33,966 middleware Request GET / by Anonymous in 11391.19 ms | groups=Anonymous | status=200
+INFO 2026-10-20 23:05:54,381 middleware Request GET /1/ by Anonymous in 15873.43 ms | groups=Anonymous | status=200

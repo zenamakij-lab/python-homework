@@ -1,110 +1,159 @@
-# Bookstore Project
+# ProjectA + ProjectB: Bookstore and Warehouse Services
 
-[![Build status](https://github.com/OWNER/REPO/actions/workflows/django.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/django.yml)
-[![Coverage](https://img.shields.io/badge/coverage-80.60%25-brightgreen)](https://github.com/OWNER/REPO/actions/workflows/django.yml)
+This workspace contains two Django services:
 
-A Django bookstore application with product catalog, cart, order creation, Stripe checkout flow, email confirmations, user authentication, and async API endpoints.
+- ProjectA: bookstore application with catalog, cart, checkout, authentication, Celery tasks, Redis cache, and REST API.
+- ProjectB: warehouse inventory service that handles stock reservation/release and exposes an inventory API consumed by ProjectA.
 
-## Features
+## Architecture
 
-- Book catalog with search and pagination
-- Session-based shopping cart
-- Order creation with transactional safety
-- Stripe payment integration
-- Email confirmation after checkout
-- User registration and login
-- Admin panel support for order management
-- Internationalization (Ukrainian / English)
-- Async JSON endpoints for books and cart summary
-- pytest + factory-boy coverage
+```text
++---------------------+      HTTP/JSON      +---------------------------+
+| ProjectA (Bookstore) | ------------------> | ProjectB (Warehouse)       |
+| - Django 4.2+       | <------------------ | - Django 4.2+             |
+| - DRF               |  inventory sync     | - DRF                     |
+| - PostgreSQL        |                     | - PostgreSQL              |
+| - Redis + Celery    |                     | - Redis + Celery          |
+| - JWT auth          |                     | - JWT auth                |
+| - NGINX + Gunicorn  |                     | - Gunicorn                |
++---------------------+                     +---------------------------+
+         |                                            |
+         |                                            |
+         v                                            v
+   Redis cache / task broker                   Inventory + reservations
+```
 
-## Stack
+## Project components
 
-- Python 3.13
-- Django 6.0.6
-- SQLite for local development
-- PostgreSQL for production/container setup
-- Redis support via Docker Compose
-- Stripe API integration
-- pytest, pytest-django, factory-boy
+### ProjectA
+
+- Book catalog, categories, cart, orders
+- Custom user model with permissions and groups
+- JWT authentication and DRF endpoints
+- Celery scheduled tasks and background reports
+- Cache and i18n support for Ukrainian and English
+- Swagger schema and admin management
+
+### ProjectB
+
+- InventoryItem model with stock and reservation tracking
+- API endpoints for inventory listing and stock synchronization
+- Error handling and logging for inter-service failures
+- JWT auth and Swagger docs
+
+## Tech stack
+
+- Django 4.2+
+- DRF
+- PostgreSQL
+- Redis
+- Celery
+- Gunicorn
+- NGINX
+- Docker Compose
+- pytest + coverage
+- Sentry monitoring support
 
 ## Local setup
 
-1. Create and activate a virtual environment.
-2. Install dependencies:
+### 1) Install dependencies
 
 ```bash
 py -m pip install -r requirements.txt
+py -m pip install -r project_b/requirements.txt
 ```
 
-3. Apply migrations:
+### 2) Create environment variables
+
+Create a `.env` file with values such as:
+
+```env
+SECRET_KEY=your-secret-key
+DEBUG=True
+POSTGRES_DB=bookstore
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+REDIS_URL=redis://127.0.0.1:6379/0
+PROJECT_B_API_URL=http://127.0.0.1:8001
+SENTRY_DSN=
+```
+
+### 3) Run ProjectA
 
 ```bash
 py manage.py migrate
+py manage.py runserver 0.0.0.0:8000
 ```
 
-4. Run the app:
+### 4) Run ProjectB
 
 ```bash
-py manage.py runserver
+cd project_b
+py manage.py migrate
+py manage.py runserver 0.0.0.0:8001
 ```
 
-5. Open the app in browser:
+### 5) Swagger documentation
 
-```text
-http://127.0.0.1:8000/
-```
+- ProjectA: http://127.0.0.1:8000/api/docs/
+- ProjectB: http://127.0.0.1:8001/api/docs/
 
-## Docker setup
+## Docker Compose
 
-Project includes a Docker Compose configuration with:
-
-- web (Django)
-- db (PostgreSQL)
-- redis
-
-To start the environment:
+The root compose file includes both services and supporting infrastructure:
 
 ```bash
 docker compose up --build
 ```
 
+Services included:
+
+- `db` PostgreSQL
+- `redis`
+- `web` ProjectA service
+- `project_b` ProjectB service
+- `celery` ProjectA worker
+- `celery-beat` scheduled jobs
+- `nginx` reverse proxy
+
+## CI/CD
+
+A GitHub Actions workflow is included under `.github/workflows/ci.yml` for:
+
+- installation of dependencies
+- Django test run
+- coverage threshold checks
+- lint verification
+
 ## Testing
 
-Run the full suite:
+Run ProjectA tests:
 
 ```bash
 py -m pytest -q
 ```
 
-Run coverage:
+Run ProjectB tests:
+
+```bash
+cd project_b
+py manage.py test warehouse
+```
+
+Coverage:
 
 ```bash
 py -m pytest --cov=. --cov-report=term-missing
 ```
 
-Current verified status:
+## Deployment notes
 
-- 50 tests passed
-- coverage 80.60%
-
-## AI Usage
-
-This project includes AI-assisted review, test generation, and documentation updates.
-
-### Prompts used
-
-1. "Review the checkout and cart flow in the Django bookstore app and suggest improvements for transaction safety, Stripe integration, and async session access."
-2. "Generate pytest tests for Book, Order, and User model logic with factory-boy and realistic assertions."
-3. "Add docstrings to all Django views and class-based views in the bookstore app and keep the code readable for future maintenance."
-4. "Write a README section for a Django bookstore project and include AI Usage with the exact prompts used."
-5. "Create an AI review document with original code, recommendations, and final code snippets for three difficult views."
-
-## Project notes
-
-- Local SQLite is the default for development.
-- PostgreSQL settings are configured via environment variables in `.env`.
-- Stripe keys and email config can be set in `.env`.
+- Gunicorn is used for production app serving.
+- NGINX is configured as a front proxy.
+- Sentry is enabled via environment variables.
+- Redis is used for cache, broker, and Celery result backend.
 
 ## License
 

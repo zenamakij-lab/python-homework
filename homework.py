@@ -1,9 +1,9 @@
-print ("task number one")
+print("task number one")
 
 number = float(input("enter number--> "))
-print("square of number isss --->", number ** 2)
+print("square of number isss --->", number**2)
 
-print ("task number dva")
+print("task number dva")
 
 a = float(input("first number-->: "))
 b = float(input("second number--> "))
@@ -12,7 +12,7 @@ c = float(input("third number-->"))
 average = (a + b + c) / 3
 print("average-->", average)
 
-print ("task number three")
+print("task number three")
 
 minutes = int(input("how much minutes-->: "))
 hours = int(input("how much hours-->: "))

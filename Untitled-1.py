@@ -1,4 +1,3 @@
-
 def string_length(text):
     return len(text)
 
@@ -7,11 +6,8 @@ def join_strings(text1, text2):
     return text1 + text2
 
 
-
-
-
 def square(number):
-    return number ** 2
+    return number**2
 
 
 def add_numbers(a, b):
@@ -24,16 +20,12 @@ def divide_numbers(a, b):
     return whole, remainder
 
 
-
-
 def average(numbers):
     return sum(numbers) / len(numbers)
 
 
 def common_elements(list1, list2):
     return list(set(list1) & set(list2))
-
-
 
 
 def print_keys(dictionary):
@@ -43,19 +35,14 @@ def print_keys(dictionary):
 
 def merge_dictionaries(dict1, dict2):
     return dict1 | dict2
-    
-
-
 
 
 def union_sets(set1, set2):
     return set1 | set2
 
+
 def is_subset(set1, set2):
     return set1.issubset(set2)
-
-
-
 
 
 def even_or_odd(number):
@@ -73,10 +60,7 @@ def even_numbers(numbers):
     return result
 
 
-
 check_even = lambda x: "Парне" if x % 2 == 0 else "Не парне"
-
-
 
 
 print(string_length("Привіт"))

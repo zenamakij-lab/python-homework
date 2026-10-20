@@ -44,25 +44,25 @@ class Group:
         return None
 
     def __str__(self):
-        students = '\n'.join(str(student) for student in self.group)
+        students = "\n".join(str(student) for student in self.group)
         return f"Group {self.number}:\n{students}"
 
 
 # проверка работы
 
-st1 = Student('Male', 30, 'Steve', 'Jobs', 'AN142')
-st2 = Student('Female', 25, 'Liza', 'Taylor', 'AN145')
+st1 = Student("Male", 30, "Steve", "Jobs", "AN142")
+st2 = Student("Female", 25, "Liza", "Taylor", "AN145")
 
-gr = Group('PD1')
+gr = Group("PD1")
 
 gr.add_student(st1)
 gr.add_student(st2)
 
 print(gr)
 
-assert gr.find_student('Jobs') == st1
-assert gr.find_student('Jobs2') is None
+assert gr.find_student("Jobs") == st1
+assert gr.find_student("Jobs2") is None
 
-gr.delete_student('Taylor')
+gr.delete_student("Taylor")
 
 print(gr)

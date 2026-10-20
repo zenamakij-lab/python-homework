@@ -21,7 +21,7 @@ while True:
     print("result-->", result)
 
     cont = input("continue?? (yes): ").lower()
-    if cont not in ( "yes"):
+    if cont not in ("yes"):
         break
 
 print("break")
